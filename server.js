@@ -2,7 +2,7 @@ var express = require('express');
   var renderer = require('react-engine');
   var path = require('path');
   var app = express();
-
+  var port = process.env.PORT || 3000;
   // then create the view engine for our express app
   var reactRoutesFilePath = path.join(__dirname + '/public/routes.jsx');
   var engine = renderer.server.create({
@@ -27,7 +27,8 @@ var express = require('express');
   // we open a free pass to all GET requests to our app and use react-engine to render them
   app.get('*', function(req, res) {
     res.render(req.url, {
-      items: require('./items.json')
+      items: require('./items.json'),
+      pouchStore: require('./public/app_js/pouchStore.js')
     });
   });
 
@@ -54,6 +55,6 @@ var express = require('express');
   });
 
   // the last step in the server side is to configure the express app to listen on port 3000
-  app.listen(3000, function() {
-    console.log('Example app listening at http://localhost:%s', 3000);
+  app.listen(port, function() {
+    console.log('Example app listening on ', port);
   });
